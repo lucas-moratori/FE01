@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏳ Desafio Front-End: Restaurando as Cores da Web</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Metadados Semânticos Web 3.0 (Schema.org / JSON-LD) -->
+    <script type="application/ld+json" id="dados-semanticos-jsonld">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Colégio Técnico de Tecnologia & Sistemas (ETEC/IF)",
+      "description": "Desafio de Estilização CSS: Restauração cromática das três eras da Web",
+      "foundingDate": "1995",
+      "educationalCredentialAwarded": "Técnico em Desenvolvimento de Sistemas"
+    }
+    </script>
+</head>
+<body class="modo-web1" id="corpo-pagina">
+
+    <!-- BARRA FIXA -->
+    <header class="painel-maquina-tempo">
+        <div class="maquina-titulo">
+            ⏳ Máquina do Tempo <span>Template do Aluno</span>
+        </div>
+
+        <div class="seletor-eras">
+            <button class="btn-era-nav ativo" onclick="comutarEra(1, this)" id="btn-era-1">
+                🕹️ Web 1.0 (1995)
+            </button>
+            <button class="btn-era-nav" onclick="comutarEra(2, this)" id="btn-era-2">
+                📱 Web 2.0 (2008)
+            </button>
+            <button class="btn-era-nav" onclick="comutarEra(3, this)" id="btn-era-3">
+                🧠 Web 3.0 (2026)
+            </button>
+        </div>
+
+        <div class="acoes-topo">
+            <button class="btn-acao-top" onclick="tocarSomModem()">🔊 Som Dial-Up</button>
+            <button class="btn-acao-top" onclick="imprimirProjetoTela()">🖨️ Imprimir Projeto</button>
+            <button class="btn-acao-top btn-urna" onclick="abrirModalUrna()">🗳️ Votar na Versão Favorita</button>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO DINÂMICO -->
+    <main class="conteudo-portal" id="palco-portal">
+        <!-- Injetado dinamicamente via JS -->
+    </main>
+
+    <!-- MODAL DA URNA ESCOLAR -->
+    <div class="modal-fundo" id="modal-urna">
+        <div class="modal-caixa">
+            <button class="btn-fechar-modal" onclick="fecharModalUrna()" title="Fechar">✕</button>
+            
+            <h3 style="color:#0f172a; font-size:1.3rem; margin-bottom:4px;">
+                🗳️ Urna Escolar: Qual versão Web ficou com o melhor visual?
+            </h3>
+            <p style="font-size:0.86rem; color:#64748b;">
+                Peça para seus colegas votarem na sua estilização! Os votos ficam salvos no navegador.
+            </p>
+
+            <div class="urna-grid-voto">
+                <div class="card-voto-opcao" onclick="computarVoto('web1')">
+                    <span class="icone-urna">🕹️</span>
+                    <h4>Web 1.0</h4>
+                    <small>Nostalgia dos anos 90, tabelas e hipertexto puro.</small>
+                    <button class="btn-votar-era">Votar nesta ➔</button>
+                </div>
+
+                <div class="card-voto-opcao" onclick="computarVoto('web2')">
+                    <span class="icone-urna">📱</span>
+                    <h4>Web 2.0</h4>
+                    <small>Redes sociais, curtidas e AJAX sem recarga.</small>
+                    <button class="btn-votar-era">Votar nesta ➔</button>
+                </div>
+
+                <div class="card-voto-opcao" onclick="computarVoto('web3')">
+                    <span class="icone-urna">🧠</span>
+                    <h4>Web 3.0</h4>
+                    <small>Dados conectados, IA semântica e modernidade.</small>
+                    <button class="btn-votar-era">Votar nesta ➔</button>
+                </div>
+            </div>
+
+            <div class="placar-box">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #334155; padding-bottom:8px;">
+                    <strong style="color:#ffffff; font-size:0.92rem;">📊 Apuração em Tempo Real:</strong>
+                    <span id="txt-total-votos" style="font-size:0.82rem; color:#94a3b8;">Total: 0 votos</span>
+                </div>
+
+                <div class="item-placar">
+                    <div class="item-placar-info">
+                        <span>🕹️ Web 1.0</span>
+                        <span id="txt-votos-web1">0 votos (0%)</span>
+                    </div>
+                    <div class="barra-voto-fundo">
+                        <div class="barra-voto-fill fill-web1" id="bar-web1"></div>
+                    </div>
+                </div>
+
+                <div class="item-placar">
+                    <div class="item-placar-info">
+                        <span>📱 Web 2.0</span>
+                        <span id="txt-votos-web2">0 votos (0%)</span>
+                    </div>
+                    <div class="barra-voto-fundo">
+                        <div class="barra-voto-fill fill-web2" id="bar-web2"></div>
+                    </div>
+                </div>
+
+                <div class="item-placar">
+                    <div class="item-placar-info">
+                        <span>🧠 Web 3.0</span>
+                        <span id="txt-votos-web3">0 votos (0%)</span>
+                    </div>
+                    <div class="barra-voto-fundo">
+                        <div class="barra-voto-fill fill-web3" id="bar-web3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="urna-rodape-acoes">
+                <button class="btn-acao-urna btn-imprimir" onclick="imprimirResultadoUrna()">
+                    🖨️ Imprimir Ata de Votação (PDF)
+                </button>
+                <button class="btn-acao-urna btn-zerar" onclick="zerarUrna()">
+                    🗑️ Zerar Urna
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOLHA A4 PARA IMPRESSÃO DA ATA -->
+    <div id="area-impressao-urna">
+        <div class="print-titulo">
+            <h1>🏛️ Ata Oficial de Apuração • Feira de Tecnologia Escolar</h1>
+            <p><strong>Disciplina:</strong> Programação Front-End (Temas 01 & 02) &bull; <strong>Projeto:</strong> A Máquina do Tempo da Web</p>
+            <p id="print-data-emissao">Data de Emissão: —</p>
+        </div>
+
+        <p style="margin-bottom:14px;">
+            A comunidade escolar participou da consulta para eleger a versão estilizada mais interessante criada pelos estudantes de Desenvolvimento de Sistemas.
+        </p>
+
+        <table class="print-tabela">
+            <thead>
+                <tr>
+                    <th>Versão Arquitetural da Web</th>
+                    <th>Tecnologias Envolvidas</th>
+                    <th>Votos Computados</th>
+                    <th>Percentual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>🕹️ Web 1.0 (Anos 90)</strong></td>
+                    <td>HTML Estático, Tabelas para Layout, Marquee</td>
+                    <td id="p-votos-w1">0</td>
+                    <td id="p-pct-w1">0%</td>
+                </tr>
+                <tr>
+                    <td><strong>📱 Web 2.0 (Anos 2000)</strong></td>
+                    <td>AJAX, Manipulação de DOM, JSON, Feed Social</td>
+                    <td id="p-votos-w2">0</td>
+                    <td id="p-pct-w2">0%</td>
+                </tr>
+                <tr>
+                    <td><strong>🧠 Web 3.0 (Contemporânea)</strong></td>
+                    <td>Web Semântica, Metadados Schema.org, IA</td>
+                    <td id="p-votos-w3">0</td>
+                    <td id="p-pct-w3">0%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="print-destaque-vencedor" id="print-caixa-vencedor">
+            <strong>🏆 Versão Mais Votada:</strong> <span id="p-nome-vencedor">Aguardando votos...</span>
+        </div>
+
+        <div class="print-assinaturas">
+            <div>
+                <div class="print-linha-ass">Representante da Equipe de Alunos</div>
+            </div>
+            <div>
+                <div class="print-linha-ass">Professor(a) da Disciplina de Front-End</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DINÂMICO (INTACTO PARA O ALUNO) -->
+    <script>
+        const STORAGE_KEY_VOTOS = "urna_votos_desafio_aluno";
+
+        function obterVotosArmazenados() {
+            const salvo = localStorage.getItem(STORAGE_KEY_VOTOS);
+            if (salvo) {
+                try { return JSON.parse(salvo); } catch(e) {}
+            }
+            return { web1: 0, web2: 0, web3: 0 };
+        }
+
+        function salvarVotos(votos) {
+            localStorage.setItem(STORAGE_KEY_VOTOS, JSON.stringify(votos));
+        }
+
+        let curtidasWeb2 = 15;
+        let comentariosWeb2 = [
+            { autor: "Professor(a)", texto: "Observem o contraste das fontes e a identidade visual de cada época!" },
+            { autor: "Colega de Turma", texto: "Ficou muito legal trocar as cores e ver o resultado na hora!" }
+        ];
+
+        const TEMPLATES_ERAS = {
+            1: `
+                <div class="banner-marquee-web1">
+                    <marquee behavior="scroll" direction="left" scrollamount="6">
+                        *** BEM-VINDO AO WEBSITE OFICIAL DO COLÉGIO TÉCNICO • ATUALIZADO PELO WEBMASTER EM 14/10/1995 *** MELHOR VISUALIZADO EM 800x600 NO NCSA MOSAIC OU NETSCAPE NAVIGATOR ***
+                    </marquee>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 12px;">
+                    <h1 style="font-size: 1.8rem;">🏛️ Colégio Técnico de Tecnologia & Sistemas</h1>
+                    <p><em>Página informativa em HyperText Markup Language (HTML 2.0 / CERN Standard)</em></p>
+                </div>
+
+                <hr>
+
+                <table class="tabela-layout-web1">
+                    <tr>
+                        <td width="25%">
+                            <h3 style="font-size:1rem; border-bottom:1px solid #94a3b8;">MENU PRINCIPAL</h3>
+                            <ul style="list-style-type: square; margin: 10px 0 0 18px; font-size: 0.9rem;">
+                                <li><a href="#" onclick="alert('Web 1.0: Toda a tela é recarregada do zero!'); return false;">Início</a></li>
+                                <li><a href="#" onclick="alert('Web 1.0: Baixando tabela via modem 28.8kbps...'); return false;">Cursos Técnicos</a></li>
+                                <li><a href="#" onclick="alert('Web 1.0: Quadro docente em arquivo estático.'); return false;">Professores</a></li>
+                                <li><a href="mailto:webmaster@escola.edu.br">Fale com o Webmaster</a></li>
+                            </ul>
+                        </td>
+                        <td width="75%">
+                            <h2 style="font-size:1.2rem;">Novidades para o Período Letivo</h2>
+                            <p style="margin: 8px 0; font-size:0.92rem; line-height:1.5;">
+                                A coordenação informa que os computadores do laboratório agora possuem placas de rede conectadas via protocolo TCP/IP, permitindo aos estudantes navegar pelas páginas do CERN e baixar arquivos pelo protocolo FTP.
+                            </p>
+                            <p style="margin: 8px 0; font-size:0.92rem; line-height:1.5;">
+                                O formato de diagramação é estático e unidirecional: você lê as informações disponibilizadas pelo webmaster da escola sem possibilidade de publicação direta.
+                            </p>
+                            <div style="border: 1px dashed #64748b; padding:8px; margin-top:10px;">
+                                📌 <strong>Aviso da Diretoria:</strong> Os horários das avaliações foram afixados no mural do pátio e transcritos nesta página estática.
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <hr>
+
+                <div style="text-align: center; margin-top: 14px; font-size: 0.85rem;">
+                    Visitante Número: <span class="contador-visitas-web1">0 0 1 9 9 5</span><br>
+                    <small>Hospedado no servidor Apache 1.0 • Não utilize elementos em Flash aqui!</small>
+                </div>
+            `,
+
+            2: `
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+                    <div>
+                        <h1 style="font-size:1.6rem;">📱 Portal CTTI Interativo 2.0</h1>
+                        <p style="color:#64748b; font-size:0.9rem;">A era das plataformas colaborativas, redes sociais e chamadas assíncronas (AJAX / REST)</p>
+                    </div>
+                </div>
+
+                <div class="web2-card-feed">
+                    <div style="display:flex; gap:12px; align-items:center; margin-bottom:10px;">
+                        <div style="width:40px; height:40px; border-radius:50%; background:#475569; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                            DS
+                        </div>
+                        <div>
+                            <strong>Grêmio Estudantil de Tecnologia</strong><br>
+                            <small style="color:#64748b;">Publicado há 12 minutos &bull; Via Web App</small>
+                        </div>
+                    </div>
+                    <p style="font-size:0.92rem; margin-bottom:12px;">
+                        🎉 O Desafio de Estilização Front-End começou! Aplique as melhores cores de CSS sem quebrar o layout da página.
+                    </p>
+
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <button class="btn-ajax-curtir" onclick="adicionarCurtidaWeb2(this)">
+                            👍 Curtir (<span id="cont-curtidas">${curtidasWeb2}</span>)
+                        </button>
+                        <span style="font-size:0.8rem; font-weight:bold;" color:#217dff>
+                            ⚡ Requisição AJAX simulada: DOM atualizado em segundo plano!
+                        </span>
+                    </div>
+
+                    <div class="devtools-json-preview">
+                        <strong>Payload JSON em trânsito (REST API):</strong>
+                        <div id="json-feed-display">{ "post_id": 104, "likes": ${curtidasWeb2}, "action": "update_without_reload", "format": "JSON" }</div>
+                    </div>
+                </div>
+
+                <div class="web2-card-feed">
+                    <h4 style="margin-bottom:10px;">💬 Mural da Turma (Interação Bi-direcional):</h4>
+                    <div id="mural-comentarios">
+                        ${comentariosWeb2.map(c => `
+                            <div style="padding:8px 0; border-bottom:1px solid #e2e8f0; font-size:0.85rem;">
+                                <strong>${c.autor}:</strong> ${c.texto}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <form onsubmit="adicionarComentarioWeb2(event)" style="margin-top:12px; display:flex; gap:8px;">
+                        <input type="text" id="input-autor" placeholder="Seu nome" required style="padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; width:30%;">
+                        <input type="text" id="input-comentario" placeholder="Escreva seu comentário sem recarregar..." required style="padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.85rem; flex:1;">
+                        <button type="submit" style="background:#217dff; color:white; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer;">Enviar</button>
+                    </form>
+                </div>
+            `,
+
+            3: `
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:18px;">
+                    <div>
+                        <span class="badge-semantico">🧠 Web Semântica & Contextual</span>
+                        <h1 style="font-size:1.7rem;">Portal Inteligente CTTI 2026</h1>
+                        <p style="color:#94a3b8; font-size:0.9rem;">Dados conectados (JSON-LD, Schema.org) com compreensão por agentes de IA e interfaces modernas.</p>
+                    </div>
+                    <div>
+                        <button onclick="verMetadadosSemanticos()" style="background:#475569; color:white; border:none; padding:8px 16px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:0.8rem;">
+                            🔍 Inspecionar Schema.org (JSON-LD)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="web3-glass-panel">
+                    <h3 style="font-size:1.1rem; margin-bottom:6px;">🤖 Busca Semântica por Contexto (Simulação de IA)</h3>
+                    <p style="font-size:0.85rem; color:#cbd5e1;">
+                        A Web Semântica entende o <em>significado</em> da intenção do usuário:
+                    </p>
+                    <input type="text" class="input-ia-semantica" id="busca-ia" placeholder="Ex: 'Quero aprender a estilizar páginas web' (Pressione Enter)..." onkeydown="if(event.key==='Enter') executarBuscaSemantica(this.value)">
+                    <div id="resultado-busca-semantica" style="margin-top:12px; font-size:0.85rem;"></div>
+                </div>
+
+                <div class="web3-glass-panel" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+                    <div>
+                        <h4 style="margin-bottom:4px;">📜 Certificado Acadêmico Digital Verificável</h4>
+                        <p style="font-size:0.84rem; color:#94a3b8;">Hash de autenticidade curricular emitido sob especificações W3C Verifiable Credentials.</p>
+                    </div>
+                    <div style="background:#090d16; border:1px solid #475569; padding:8px 16px; border-radius:8px; font-family:monospace; font-size:0.75rem; color:#ffffff;">
+                        HASH: 0x8f2a...7c91 (VÁLIDO)
+                    </div>
+                </div>
+            `
+        };
+
+        const RODAPE_HISTORICO = `
+            <section class="painel-historico-pioneiros">
+                <h4 class="historico-secao-titulo">
+                    🏛️ Fundamentos Históricos da Disciplina (Temas 01 & 02):
+                </h4>
+                <div class="historico-grid">
+                    <div class="historico-card">
+                        <span class="historico-titulo">1969 • ARPANET</span>
+                        Primeira conexão por comutação de pacotes entre UCLA e Stanford. Transmissão histórica da mensagem "LO".
+                    </div>
+                    <div class="historico-card">
+                        <span class="historico-titulo">1983 • O Padrão TCP/IP</span>
+                        O "Flag Day" desliga o antigo protocolo NCP e unifica todas as redes mundiais na Internet.
+                    </div>
+                    <div class="historico-card">
+                        <span class="historico-titulo">1989/1991 • World Wide Web</span>
+                        Tim Berners-Lee cria no CERN a tríade URL, HTML e HTTP. Em 1994, funda o W3C para normatizar a Web.
+                    </div>
+                    <div class="historico-card">
+                        <span class="historico-titulo">1989 • A Internet no Brasil</span>
+                        O LNCC conecta-se aos EUA e a FAPESP inicia o registro histórico do domínio <code>.br</code>.
+                    </div>
+                </div>
+            </section>
+        `;
+
+        function comutarEra(era, btn) {
+            document.querySelectorAll('.btn-era-nav').forEach(b => b.classList.remove('ativo'));
+            btn.classList.add('ativo');
+
+            const corpo = document.getElementById('corpo-pagina');
+            const palco = document.getElementById('palco-portal');
+
+            corpo.className = 'modo-web' + era;
+            palco.innerHTML = TEMPLATES_ERAS[era] + RODAPE_HISTORICO;
+        }
+
+        function adicionarCurtidaWeb2(btn) {
+            curtidasWeb2++;
+            document.getElementById('cont-curtidas').innerText = curtidasWeb2;
+            document.getElementById('json-feed-display').innerText = 
+                JSON.stringify({ post_id: 104, likes: curtidasWeb2, action: "update_without_reload", format: "JSON" }, null, 2);
+            
+            btn.style.transform = "scale(1.15)";
+            setTimeout(() => btn.style.transform = "scale(1)", 150);
+        }
+
+        function adicionarComentarioWeb2(e) {
+            e.preventDefault();
+            const autor = document.getElementById('input-autor').value;
+            const texto = document.getElementById('input-comentario').value;
+
+            comentariosWeb2.push({ autor, texto });
+
+            const mural = document.getElementById('mural-comentarios');
+            const novoItem = document.createElement('div');
+            novoItem.style = "padding:8px 0; border-bottom:1px solid #cbd5e1; font-size:0.85rem;";
+            novoItem.innerHTML = `<strong>${autor}:</strong> ${texto}`;
+            mural.appendChild(novoItem);
+
+            document.getElementById('input-comentario').value = '';
+        }
+
+        function executarBuscaSemantica(termo) {
+            const tela = document.getElementById('resultado-busca-semantica');
+            tela.innerHTML = "⏳ <em>O agente semântico está cruzando o contexto com as ontologias educacionais...</em>";
+
+            setTimeout(() => {
+                tela.innerHTML = `
+                    <div style="border-left:3px solid #64748b; padding:8px 12px; margin-top:8px; background:rgba(255,255,255,0.05);">
+                        🎯 <strong>Conceito Identificado:</strong> Disciplina de Programação Front-End (Estilização CSS & Teoria das Cores).<br>
+                        💡 <strong>Resultado Semântico:</strong> O sistema compreendeu a intenção do estudante e indexou a folha de estilos.
+                    </div>
+                `;
+            }, 600);
+        }
+
+        function verMetadadosSemanticos() {
+            const jsonld = document.getElementById('dados-semanticos-jsonld').textContent;
+            alert("📋 METADADOS JSON-LD / SCHEMA.ORG DA PÁGINA:\n\n" + jsonld);
+        }
+
+        function tocarSomModem() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(350, audioCtx.currentTime);
+                osc1.frequency.setValueAtTime(440, audioCtx.currentTime + 0.1);
+                gain1.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start();
+                osc1.stop(audioCtx.currentTime + 0.8);
+
+                setTimeout(() => {
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.type = 'sawtooth';
+                    osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                    osc2.frequency.linearRampToValueAtTime(2400, audioCtx.currentTime + 0.6);
+                    gain2.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.start();
+                    osc2.stop(audioCtx.currentTime + 0.8);
+                }, 400);
+            } catch (e) {
+                alert("🔊 [Som simulado]: Bi-bip... shhhhhh... Conectado a 28.800 bps!");
+            }
+        }
+
+        function abrirModalUrna() {
+            atualizarPlacarUrna();
+            document.getElementById('modal-urna').classList.add('ativo');
+        }
+
+        function fecharModalUrna() {
+            document.getElementById('modal-urna').classList.remove('ativo');
+        }
+
+        function computarVoto(eraKey) {
+            const votos = obterVotosArmazenados();
+            votos[eraKey] = (votos[eraKey] || 0) + 1;
+            salvarVotos(votos);
+            atualizarPlacarUrna();
+
+            const nomes = { web1: "Web 1.0", web2: "Web 2.0", web3: "Web 3.0" };
+            alert(`✅ Voto registrado para a estilização da: ${nomes[eraKey]}!\nOs votos continuam salvos neste navegador.`);
+        }
+
+        function atualizarPlacarUrna() {
+            const votos = obterVotosArmazenados();
+            const total = votos.web1 + votos.web2 + votos.web3;
+
+            document.getElementById('txt-total-votos').innerText = `Total: ${total} voto(s)`;
+
+            const pct1 = total > 0 ? Math.round((votos.web1 / total) * 100) : 0;
+            const pct2 = total > 0 ? Math.round((votos.web2 / total) * 100) : 0;
+            const pct3 = total > 0 ? Math.round((votos.web3 / total) * 100) : 0;
+
+            document.getElementById('txt-votos-web1').innerText = `${votos.web1} voto(s) (${pct1}%)`;
+            document.getElementById('txt-votos-web2').innerText = `${votos.web2} voto(s) (${pct2}%)`;
+            document.getElementById('txt-votos-web3').innerText = `${votos.web3} voto(s) (${pct3}%)`;
+
+            document.getElementById('bar-web1').style.width = pct1 + '%';
+            document.getElementById('bar-web2').style.width = pct2 + '%';
+            document.getElementById('bar-web3').style.width = pct3 + '%';
+        }
+
+        function zerarUrna() {
+            if (!confirm("⚠️ Deseja realmente zerar a contagem de votos da urna?")) return;
+            salvarVotos({ web1: 0, web2: 0, web3: 0 });
+            atualizarPlacarUrna();
+            alert("🗑️ Urna zerada com sucesso!");
+        }
+
+        function imprimirResultadoUrna() {
+            const votos = obterVotosArmazenados();
+            const total = votos.web1 + votos.web2 + votos.web3;
+
+            if (total === 0) {
+                alert("⚠️ A urna ainda não possui votos registrados para gerar o relatório.");
+                return;
+            }
+
+            const pct1 = Math.round((votos.web1 / total) * 100);
+            const pct2 = Math.round((votos.web2 / total) * 100);
+            const pct3 = Math.round((votos.web3 / total) * 100);
+
+            document.getElementById('p-votos-w1').innerText = votos.web1;
+            document.getElementById('p-pct-w1').innerText = pct1 + '%';
+
+            document.getElementById('p-votos-w2').innerText = votos.web2;
+            document.getElementById('p-pct-w2').innerText = pct2 + '%';
+
+            document.getElementById('p-votos-w3').innerText = votos.web3;
+            document.getElementById('p-pct-w3').innerText = pct3 + '%';
+
+            document.getElementById('print-data-emissao').innerText = 
+                "Data de Emissão: " + new Date().toLocaleString('pt-BR');
+
+            let vencedor = "Empate";
+            if (votos.web1 > votos.web2 && votos.web1 > votos.web3) {
+                vencedor = `Web 1.0 com ${votos.web1} votos (${pct1}%)`;
+            } else if (votos.web2 > votos.web1 && votos.web2 > votos.web3) {
+                vencedor = `Web 2.0 com ${votos.web2} votos (${pct2}%)`;
+            } else if (votos.web3 > votos.web1 && votos.web3 > votos.web2) {
+                vencedor = `Web 3.0 com ${votos.web3} votos (${pct3}%)`;
+            }
+            document.getElementById('p-nome-vencedor').innerText = vencedor;
+
+            document.body.classList.add('imprimindo-urna');
+            window.print();
+            
+            setTimeout(() => { document.body.classList.remove('imprimindo-urna'); }, 1000);
+            window.addEventListener('afterprint', () => {
+                document.body.classList.remove('imprimindo-urna');
+            }, { once: true });
+        }
+
+        function imprimirProjetoTela() {
+            document.body.classList.remove('imprimindo-urna');
+            window.print();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            comutarEra(1, document.getElementById('btn-era-1'));
+        });
+    </script>
+</body>
+</html>
